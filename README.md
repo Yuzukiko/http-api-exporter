@@ -10,6 +10,6 @@ Metrics are exported on port 5000 on endpoint /metrics
 | env      | value                                                             | mandatory |
 |----------|-------------------------------------------------------------------|-----------|
 | API_LIST | [{"name": "", "description":"", "url":"", "request_interval":10}] | yes       |
-| DEBUG    | True/False                                                        | yes       |
+| DEBUG    | True/False                                                        | no        |
 
 Request_interval is in seconds
