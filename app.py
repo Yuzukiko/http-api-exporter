@@ -18,6 +18,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format=f'%(asctime)s
 load_dotenv()
 api_list = json.loads(os.getenv("API_LIST"))
 debug_mode = (os.getenv('DEBUG', 'False') == 'True')
+port = int(os.getenv('PORT', 5000))
 
 # add all additional metrics
 def setup(api_list):
@@ -27,15 +28,12 @@ def setup(api_list):
 
 # checker thread thats sends request every x seconds
 def checker_thread(name, description, url, request_interval):
-    last_request = ""
     api_info = Info(name, description)
     while True:
         app.logger.info(f"{name} - Checking request response")
         current_request = requests.get(url).json()
-        if last_request != current_request:
-            app.logger.info(f"{name} - Updated response to {current_request}")
-            last_request = current_request
-        api_info._value.update({"value": json.dumps(last_request)})
+        app.logger.info(f"{name} - Updating response to {current_request}")
+        api_info._value.update({"value": json.dumps(current_request)})
         time.sleep(request_interval)
         
 # Add prometheus wsgi middleware to route /metrics requests
@@ -45,4 +43,4 @@ app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
 
 if __name__ == '__main__':
     setup(api_list)
-    app.run(host="0.0.0.0", port=5000, debug=debug_mode)
+    app.run(host="0.0.0.0", port=port, debug=debug_mode)
