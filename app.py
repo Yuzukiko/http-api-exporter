@@ -1,6 +1,6 @@
 from flask import Flask
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
-from prometheus_client import make_wsgi_app
+from prometheus_client import Histogram, make_wsgi_app
 from prometheus_client import Info
 import threading
 import time
@@ -35,7 +35,7 @@ def checker_thread(name, description, url, request_interval):
         if last_request != current_request:
             app.logger.info(f"{name} - Updated response to {current_request}")
             last_request = current_request
-        api_info.info(last_request)
+        api_info._value.update({"value": json.dumps(last_request)})
         time.sleep(request_interval)
         
 # Add prometheus wsgi middleware to route /metrics requests
