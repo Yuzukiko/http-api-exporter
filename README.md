@@ -1,5 +1,5 @@
 # prometheus-http-api-exporter
-[![Docker Image CI](https://github.com/Yuzukiko/http-api-exporter/actions/workflows/docker-image.yml/badge.svg)](https://github.com/Yuzukiko/http-api-exporter/actions/workflows/docker-image.yml)
+[![Docker Image CI](https://github.com/Yuzukiko/prometheus-http-api-exporter/actions/workflows/docker-image.yml/badge.svg)](https://github.com/Yuzukiko/prometheus-http-api-exporter/actions/workflows/docker-image.yml)
 
 Prometheus exporter for results of http api requests\
 Metrics are exported on port 5000 (default) on endpoint /metrics
