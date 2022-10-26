@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name:  prometheus-http-api-exporter
-        image:  yuzukiko/prometheus-http-api-exporter:3277019856
+        image:  yuzukiko/prometheus-http-api-exporter:3324201532
         resources:
           requests:
             cpu: 100m
@@ -31,15 +31,15 @@ spec:
         - name: API_LIST
           valueFrom:
             configMapKeyRef:
-              name: prometheus-http-api-exporter_configmap
+              name: prometheus-http-api-exporter
               key: api
         - name: DEBUG
           value: "True"
         - name: PORT
-          value: 5000
+          value: "5000"
         ports:
-        - containerPort:  5000
-          name:  prometheus-http-api-exporter
+        - name: metrics
+          containerPort: 5000
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -56,7 +56,7 @@ spec:
     clientIP:
       timeoutSeconds: 10800
   ports:
-  - name: prometheus-http-api-exporter
+  - name: metrics
     protocol: TCP
     port: 5000
     targetPort: 5000
@@ -64,9 +64,10 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: prometheus-http-api-exporter_configmap
+  name: prometheus-http-api-exporter
+  namespace: monitoring
   labels:
     app: prometheus-http-api-exporter
 data:
   api: |
-    [{"name": "", "description":"", "url":"", "request_interval":10}]
+    [{"name": "", "description":"", "url":"", "headers":"{}", "request_interval":10}]
