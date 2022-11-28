@@ -31,19 +31,25 @@ def checker_thread(name, description, url, headers, request_interval):
     api_info = Info(name, description)
     while True:
         app.logger.info(f"{name} - Checking request response")
-        if (headers == None) or (headers==""):
+        if (headers == None) or (headers=="") or (headers=="{}"):
             current_request = requests.get(url).json()
         else:
             current_request = requests.get(url, headers=json.loads(headers)).json()
         app.logger.info(f"{name} - Updating response to {current_request}")
         api_info._value.update({"value": json.dumps(current_request)})
         time.sleep(request_interval)
-        
+
+# landing page with link
+@app.route('/', methods=['GET'])
+def root_page():
+    return '<p>Searching for <a href="/metrics">metrics</a>?</p>'
+
 # Add prometheus wsgi middleware to route /metrics requests
 app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
     '/metrics': make_wsgi_app()
 })
 
+# run app
 if __name__ == '__main__':
     setup(api_list)
     app.run(host="0.0.0.0", port=port, debug=debug_mode)
